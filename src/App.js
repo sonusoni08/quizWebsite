@@ -1,25 +1,50 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from "react"
+import WelcomePage from './components/welcomePage'
+import Quiz from "./components/Quiz"
+import NavBar from './components/navBar';
 
 function App() {
+
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    phone: ""
+  });
+
+  const [currentPage, setCurrentPage] = useState(true);
+
+  function userInfoInput() {
+    setCurrentPage(prev => !prev)
+  }
+
+  function handleChange(event) {
+    const { name, value, type } = event.target
+    setUserInfo((prev) => {
+      return {
+        ...prev,
+        [name]: value
+      }
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {currentPage && <WelcomePage
+        name={userInfo.name}
+        email={userInfo.email}
+        phone={userInfo.phone}
+        handleClick={userInfoInput}
+        change={handleChange}
+      />}
+      {!currentPage && <NavBar
+        name={userInfo.name}
+        email={userInfo.email}
+        phone={userInfo.phone}
+      />}
+      {!currentPage && <Quiz />}
     </div>
-  );
+  )
 }
 
 export default App;
